@@ -11,10 +11,43 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/test_app"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_roll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_main"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="384dp" />
+
+    <SeekBar
+        android:id="@+id/seekBar_dados"
+        android:layout_width="285dp"
+        android:layout_height="21dp"
+        android:max="6"
+        android:progress="0"
+        tools:layout_editor_absoluteX="18dp"
+        tools:layout_editor_absoluteY="191dp" />
+
+    <Switch
+        android:id="@+id/switch_vantage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_main_2"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="296dp" />
+
+    <Switch
+        android:id="@+id/switch_weary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_main_1"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="263dp" />
 
 </android.support.constraint.ConstraintLayout>
