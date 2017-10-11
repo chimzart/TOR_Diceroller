@@ -6,28 +6,32 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.*;
 import android.widget.*;
-import android.view.View;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    private SeekBar seekBar_dados;
+// componentes interface
+    private SeekBar seekBar_dices;
     private Switch switch_vantage;
     private Switch switch_weary;
     private Button button_roll;
+    private TextView seekBar_progress;
+    private int diceValue = 0;
+    //private boolean vantage_Status = false;
+    //private int disvantage_Status = false;
+    //private int weary_Status = false;
 
-
+// cria a interface
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+// Recuperar idenificadores dos objetos da interface
 
-        seekBar_dados = (SeekBar) findViewById(R.id.seekBar_dados);
+        seekBar_dices = (SeekBar) findViewById(R.id.seekBar_dices);
+        seekBar_progress = (TextView) findViewById(R.id.seekBar_progress);
         switch_vantage = (Switch) findViewById(R.id.switch_vantage);
         switch_weary = (Switch) findViewById(R.id.switch_weary);
         button_roll = (Button) findViewById(R.id.button_roll);
@@ -35,27 +39,78 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+//SeekBar
+        seekBar_dices.setProgress(diceValue);
+        seekBar_progress.setText(""+ diceValue);
+
+        seekBar_dices.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar_dices, int i, boolean b) {
+                diceValue = i;
+                seekBar_progress.setText(""+ diceValue);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar_dices) {
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar_dices) {
+            }
+        });
+
+
+//Button
         button_roll.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                String ResString = "";
+                //verify how many sucess dices are; draw the results for each dice
+                for(int i = diceValue; i>0; i--) {
+                   int Roll = diceRoll(6);
+                //check weary status and ignore the lessers results
+
+                    ResString += " |Dice"+i;
+                    if(switch_weary.isChecked() && Roll<= 3 ){
+                        ResString += ": NULO";
+                    }else{
+                        ResString += ": " +Roll;}
+
+                }
+                //account for great and extraordinary sucess
+                //roll the feat die
+                int Roll = diceRoll(12);
+                //check weary status and ignore the lessers results
+                ResString += " |Feat Die:";
+                if(switch_weary.isChecked() && Roll<= 3 ){
+                    ResString += ": NULO";
+                }else{
+                    ResString += ": " +Roll;}
+
+                //roll again for vantage/disvantage plays
+                //check for Gandalf's rune and Sauron's eye
 
                 AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-                dlg.setMessage(button_roll.getText().toString());
+                dlg.setMessage(ResString);
                 dlg.setNeutralButton("OK",null);
                 dlg.show();
-
             }
-
         });
 
+//ActionButton
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "fernando.ferreira@ufrgs.br", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    // random number
+    private int diceRoll(int sides) {
+      //  private static final int MIN_NUMBER = 1;
+        return (1 + (int) (Math.random() * ((sides - 1) + 1)));
     }
 
     @Override
