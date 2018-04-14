@@ -1,5 +1,6 @@
 package chimzart.tor_diceroller;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Switch switch_weary;
     private Button button_roll;
     private TextView seekBar_progress;
+    private ImageView[] imageView_dice = new ImageView[8];
     private int diceValue = 0;
     //private boolean advantage_Status = false;
     //private int disadvantage_Status = false;
@@ -42,8 +44,37 @@ public class MainActivity extends AppCompatActivity {
         switch_disadvantage = (Switch) findViewById(R.id.switch_disadvantage);
         button_roll = (Button) findViewById(R.id.button_roll);
 
+        imageView_dice[0] = (ImageView) findViewById (R.id.imageView_dice1);
+        imageView_dice[1] = (ImageView) findViewById (R.id.imageView_dice2);
+        imageView_dice[2] = (ImageView) findViewById (R.id.imageView_dice3);
+        imageView_dice[3] = (ImageView) findViewById (R.id.imageView_dice4);
+        imageView_dice[4] = (ImageView) findViewById (R.id.imageView_dice5);
+        imageView_dice[5] = (ImageView) findViewById (R.id.imageView_dice6);
+        imageView_dice[6] = (ImageView) findViewById (R.id.imageView_dice7);
+        imageView_dice[7] = (ImageView) findViewById (R.id.imageView_dice8);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        imageView_dice[0].setVisibility(View.INVISIBLE);
+        imageView_dice[1].setVisibility(View.INVISIBLE);
+        imageView_dice[2].setVisibility(View.INVISIBLE);
+        imageView_dice[3].setVisibility(View.INVISIBLE);
+        imageView_dice[4].setVisibility(View.INVISIBLE);
+        imageView_dice[5].setVisibility(View.INVISIBLE);
+        imageView_dice[6].setVisibility(View.INVISIBLE);
+        imageView_dice[7].setVisibility(View.INVISIBLE);
+
+
+        imageView_dice[0].setImageResource(R.mipmap.d12_g);
+        imageView_dice[1].setImageResource(R.mipmap.d12_10);
+        imageView_dice[2].setImageResource(R.mipmap.d6_1);
+        imageView_dice[3].setImageResource(R.mipmap.d6_2);
+        imageView_dice[4].setImageResource(R.mipmap.d6_3);
+        imageView_dice[5].setImageResource(R.mipmap.d6_4);
+        imageView_dice[6].setImageResource(R.mipmap.d6_5);
+        imageView_dice[7].setImageResource(R.mipmap.d6_6);
+
+       // imageView_dice2.setImageResource(@mipmap/d12_6);
 
 
 //SeekBar
@@ -71,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     switch_advantage.setEnabled(false);
+                    switch_advantage.setChecked(false);
                     switch_disadvantage.setEnabled(false);
+                    switch_disadvantage.setChecked(false);
                 } else {
                     switch_advantage.setEnabled(true);
                     switch_disadvantage.setEnabled(true);
@@ -84,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     switch_disadvantage.setEnabled(false);
+                    switch_disadvantage.setChecked(false);
                 } else {
                     switch_disadvantage.setEnabled(true);
                 }
@@ -95,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     switch_advantage.setEnabled(false);
+                    switch_advantage.setChecked(false);
                 } else {
                     switch_advantage.setEnabled(true);
                 }
@@ -105,33 +140,55 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 String ResString = "";
+                imageView_dice[0].setVisibility(View.INVISIBLE);
+                imageView_dice[1].setVisibility(View.INVISIBLE);
+                imageView_dice[2].setVisibility(View.INVISIBLE);
+                imageView_dice[3].setVisibility(View.INVISIBLE);
+                imageView_dice[4].setVisibility(View.INVISIBLE);
+                imageView_dice[5].setVisibility(View.INVISIBLE);
+                imageView_dice[6].setVisibility(View.INVISIBLE);
+                imageView_dice[7].setVisibility(View.INVISIBLE);
+
+
                 //verify how many sucess dices are; draw the results for each dice
-                for(int i = diceValue; i>0; i--) {
-                   int Roll = diceRoll(6);
+                int[] Roll = new int[diceValue];
+                Integer[] d6_img =  {R.mipmap.d6_1, R.mipmap.d6_2, R.mipmap.d6_3, R.mipmap.d6_4, R.mipmap.d6_5, R.mipmap.d6_6};
+
+                for(int i = 0; i<diceValue; i++) {
+                   imageView_dice[2+i].setVisibility(View.VISIBLE);
+                   Roll[i] = diceRoll(6);
+                   imageView_dice[i+2].setImageResource(d6_img[Roll[i]-1]);
+
                 //check weary status and ignore the lessers results
 
                     ResString += " |Dice"+i;
-                    if(switch_weary.isChecked() && Roll<= 3 ){
+                    if(switch_weary.isChecked() && Roll[i]<= 3 ){
                         ResString += ": NULO";
                     }else{
-                        ResString += ": " +Roll;}
+                        ResString += ": " +Roll[i];}
 
                 }
                 //account for great and extraordinary sucess
 
 
                 //roll the feat die
-                if(!switch_feat.isChecked()) {
 
+                if(!switch_feat.isChecked()) {
+                    imageView_dice[0].setVisibility(View.VISIBLE);
                     //roll again for vantage/disvantage plays
+                    Integer[] d12_img =  {R.mipmap.d12_0, R.mipmap.d12_1, R.mipmap.d12_2, R.mipmap.d12_3, R.mipmap.d12_4, R.mipmap.d12_5, R.mipmap.d12_6, R.mipmap.d12_7, R.mipmap.d12_8, R.mipmap.d12_9, R.mipmap.d12_10, R.mipmap.d12_g};
                     Integer[] RollAr = new Integer[] {0,0};
                     RollAr[0] = diceRoll(12);
+                    imageView_dice[0].setImageResource(d12_img[RollAr[0]-1]);
                     RollAr[1] = diceRoll(12);
+                    imageView_dice[1].setImageResource(d12_img[RollAr[1]-1]);
 
                     if(switch_advantage.isChecked()) {
+                        imageView_dice[1].setVisibility(View.VISIBLE);
                         Arrays.sort(RollAr, Collections.reverseOrder());
                     }
                     if(switch_disadvantage.isChecked()) {
+                        imageView_dice[1].setVisibility(View.VISIBLE);
                         Arrays.sort(RollAr);
 
 
@@ -149,10 +206,12 @@ public class MainActivity extends AppCompatActivity {
                     //check for Gandalf's rune and Sauron's eye
                 }
 
+         /*     manual result presentatiom method
                 AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
                 dlg.setMessage(ResString);
                 dlg.setNeutralButton("OK",null);
                 dlg.show();
+         */
             }
         });
 
